@@ -58,7 +58,6 @@ describe 'TicTactoe' do
                             [2, 4, 6]]
     [*0..8].permutation(3).each do |arr|
       if winning_combinations.include?(arr.sort)
-        byebug if TicTacToe.is_winning_position?(arr) == false
         expect(TicTacToe.is_winning_position?(arr)).to eq true
       else
         expect(TicTacToe.is_winning_position?(arr)).to eq false
