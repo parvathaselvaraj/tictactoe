@@ -47,4 +47,131 @@ describe 'TicTactoe' do
     expect { game.play(5) }.to raise_error('Cell is already occupied')
   end
 
+  it 'should identify winning positions' do
+    winning_combinations = [[0, 1, 2],
+                            [3, 4, 5],
+                            [6, 7, 8],
+                            [0, 3, 6],
+                            [1, 4, 7],
+                            [2, 5, 8],
+                            [0, 4, 8],
+                            [2, 4, 6]]
+    [*0..8].permutation(3).each do |arr|
+      if winning_combinations.include?(arr.sort)
+        byebug if TicTacToe.is_winning_position?(arr) == false
+        expect(TicTacToe.is_winning_position?(arr)).to eq true
+      else
+        expect(TicTacToe.is_winning_position?(arr)).to eq false
+      end
+    end
+  end
+
+  it 'should identify if the game is completed' do
+    game = TicTacToe.new
+    game.play(0)
+    expect(game.completed?).to eq false
+    game.play(4)
+    expect(game.completed?).to eq false
+    game.play(3)
+    expect(game.completed?).to eq false
+    game.play(5)
+    expect(game.completed?).to eq false
+    game.play(6)
+    expect(game.completed?).to eq true
+  end
+
+  it 'should update the result when game is completed' do
+    game = TicTacToe.new
+    game.play(0)
+    expect(game.result).to eq nil
+    game.play(4)
+    expect(game.result).to eq nil
+    game.play(3)
+    expect(game.result).to eq nil
+    game.play(5)
+    expect(game.result).to eq nil
+    game.play(6)
+    expect(game.completed?).to eq true
+    expect(game.result).to eq 'X'
+  end
+
+  context 'Sample Games' do
+    context 'When "X" is the winner' do
+      it 'should declare "X" as winner' do
+        game = TicTacToe.new
+        game.play(0)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(4)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(3)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(5)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(6)
+        expect(game.completed?).to eq true
+        expect(game.result).to eq 'X'
+      end
+    end
+
+    context 'When "O" is the winner' do
+      it 'should declare "O" as winner' do
+        game = TicTacToe.new
+        game.play(0)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(4)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(1)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(3)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(8)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(5)
+        expect(game.completed?).to eq true
+        expect(game.result).to eq 'O'
+      end
+    end
+
+    context 'When nobody wins' do
+      it 'should declare the result as "DRAW"' do
+        game = TicTacToe.new
+        game.play(0)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(3)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(6)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(4)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(1)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(2)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(5)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(8)
+        expect(game.completed?).to eq false
+        expect(game.result).to eq nil
+        game.play(7)
+        expect(game.completed?).to eq true
+        expect(game.result).to eq 'DRAW'
+      end
+    end
+  end
 end
