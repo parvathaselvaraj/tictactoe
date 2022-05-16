@@ -22,6 +22,10 @@ describe 'TicTactoe' do
     expect(game.current_player).to eq 'X'
     game.play(4)
     expect(game.current_player).to eq 'O'
+    game.play(5)
+    expect(game.current_player).to eq 'X'
+    game.play(6)
+    expect(game.current_player).to eq 'O'
   end
 
   it 'should save the players move' do
@@ -29,5 +33,18 @@ describe 'TicTactoe' do
     expect(game.current_player).to eq 'X'
     game.play(4)
     expect(game.get(4)).to eq 'X'
+    expect(game.cells).to eq [nil, nil, nil, nil, 'X', nil, nil, nil, nil]
   end
+
+  it 'should not allow to use the same cell twice' do
+    game = TicTacToe.new
+    game.play(4)
+    expect(game.get(4)).to eq 'X'
+    expect { game.play(4) }.to raise_error('Cell is already occupied')
+
+    game.play(5)
+    expect(game.get(5)).to eq 'O'
+    expect { game.play(5) }.to raise_error('Cell is already occupied')
+  end
+
 end
