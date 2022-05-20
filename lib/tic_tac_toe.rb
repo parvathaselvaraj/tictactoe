@@ -9,6 +9,7 @@ class TicTacToe
 
   def play(current_index)
     raise 'Cell is already occupied' unless @cells[current_index].nil?
+    raise 'The game is over. Please reset.' if completed?
 
     @cells[current_index] = @current_player
     @current_player = @current_player == @player1 ? @player2 : @player1
@@ -54,5 +55,10 @@ class TicTacToe
     else
       nil
     end 
+  end
+
+  def reset
+    @cells = [nil, nil, nil, nil, nil, nil, nil, nil, nil]
+    @current_player = @player1
   end
 end

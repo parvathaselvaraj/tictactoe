@@ -79,6 +79,37 @@ describe 'TicTactoe' do
     expect(game.completed?).to eq true
   end
 
+  it 'should not allow to play if the game is completed' do
+    game = TicTacToe.new
+    game.play(0)
+    expect(game.completed?).to eq false
+    game.play(4)
+    expect(game.completed?).to eq false
+    game.play(3)
+    expect(game.completed?).to eq false
+    game.play(5)
+    expect(game.completed?).to eq false
+    game.play(6)
+    expect(game.completed?).to eq true
+    expect { game.play(1) }.to raise_error("The game is over. Please reset.")
+  end
+
+  it 'should allow to reset' do
+    game = TicTacToe.new
+    game.play(0)
+    game.play(4)
+    game.play(3)
+    game.play(5)
+    game.play(6)
+    expect(game.completed?).to eq true
+    expect(game.result).to eq 'X'
+    game.reset
+    expect(game.result).to eq nil
+    expect(game.completed?).to eq false
+    expect(game.cells).to eq [nil, nil, nil, nil, nil, nil, nil, nil, nil]
+    expect(game.current_player).to eq 'X'
+  end
+
   it 'should update the result when game is completed' do
     game = TicTacToe.new
     game.play(0)
