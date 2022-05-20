@@ -8,23 +8,27 @@ class TicTacToe
   end
   attr_reader :cells, :player1, :player2, :current_player, :result
 
+  def update_result
+    if completed? # either has won or all filled
+      winning_positions = self.class.winning_combinations.find do |indices| 
+        @cells[indices[0]] == @cells[indices[1]] && @cells[indices[1]] == @cells[indices[2]]
+      end
+      if winning_positions == nil
+        @result = 'DRAW'
+      else 
+        @result = @cells[winning_positions[0]] 
+      end
+    end 
+  end
+  
   def play(current_index)
     raise 'Cell is already occupied' unless @cells[current_index].nil?
     raise 'The game is over. Please reset.' if completed?
 
     @cells[current_index] = @current_player
     @current_player = @current_player == @player1 ? @player2 : @player1
-    if completed? # either has won or all filled
-      has_won = self.class.winning_combinations.find do |indices| 
-        @cells[indices[0]] == @cells[indices[1]] && @cells[indices[1]] == @cells[indices[2]]
-      end
-      return @result = 'DRAW' if has_won == nil
-      return @result = 'X' if  @cells[has_won[0]] == 'X'
-      return @result = 'O' if @cells[has_won[0]] == 'O'
-    else
-      @result
-    end 
-    @result
+    update_result
+    @current_player
   end
 
   def get(current_index)
@@ -55,10 +59,6 @@ class TicTacToe
     all_filled = @cells.none?(nil)
     has_won || all_filled
   end
-
-  # def result
-  #   
-  # end
 
   def reset
     @cells = [nil, nil, nil, nil, nil, nil, nil, nil, nil]
