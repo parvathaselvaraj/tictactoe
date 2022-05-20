@@ -45,14 +45,12 @@ class TicTacToe
 
   def result
     if completed? # either has won or all filled
-      has_won = self.class.winning_combinations.any? do |indices| 
-        is_equal = @cells[indices[0]] == @cells[indices[1]] && @cells[indices[1]] == @cells[indices[2]]
-        if @cells[indices[0]] == 'X'
-          return 'X'
-        elseif @cells[indices[0]] == 'O'
-          return 'O'
-        end
+      has_won = self.class.winning_combinations.find do |indices| 
+        @cells[indices[0]] == @cells[indices[1]] && @cells[indices[1]] == @cells[indices[2]]
       end
+      return 'DRAW' if has_won == nil
+      return 'X' if  @cells[has_won[0]] == 'X'
+      return 'O' if @cells[has_won[0]] == 'O'
     else
       nil
     end 
