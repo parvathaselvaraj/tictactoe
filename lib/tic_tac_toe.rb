@@ -4,8 +4,9 @@ class TicTacToe
     @player1 = 'X' # @player1 => instance variable (using @)
     @player2 = 'O'
     @current_player = @player1
+    @result = nil
   end
-  attr_reader :cells, :player1, :player2, :current_player
+  attr_reader :cells, :player1, :player2, :current_player, :result
 
   def play(current_index)
     raise 'Cell is already occupied' unless @cells[current_index].nil?
@@ -13,6 +14,17 @@ class TicTacToe
 
     @cells[current_index] = @current_player
     @current_player = @current_player == @player1 ? @player2 : @player1
+    if completed? # either has won or all filled
+      has_won = self.class.winning_combinations.find do |indices| 
+        @cells[indices[0]] == @cells[indices[1]] && @cells[indices[1]] == @cells[indices[2]]
+      end
+      return @result = 'DRAW' if has_won == nil
+      return @result = 'X' if  @cells[has_won[0]] == 'X'
+      return @result = 'O' if @cells[has_won[0]] == 'O'
+    else
+      @result
+    end 
+    @result
   end
 
   def get(current_index)
@@ -44,21 +56,14 @@ class TicTacToe
     has_won || all_filled
   end
 
-  def result
-    if completed? # either has won or all filled
-      has_won = self.class.winning_combinations.find do |indices| 
-        @cells[indices[0]] == @cells[indices[1]] && @cells[indices[1]] == @cells[indices[2]]
-      end
-      return 'DRAW' if has_won == nil
-      return 'X' if  @cells[has_won[0]] == 'X'
-      return 'O' if @cells[has_won[0]] == 'O'
-    else
-      nil
-    end 
-  end
+  # def result
+  #   
+  # end
 
   def reset
     @cells = [nil, nil, nil, nil, nil, nil, nil, nil, nil]
     @current_player = @player1
+    @result = nil
   end
+  
 end
